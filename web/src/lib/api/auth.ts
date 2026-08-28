@@ -35,3 +35,22 @@ export async function registerUser(credentials: RegisterCredentials): Promise<Au
 export async function logoutUser(): Promise<void> {
   await fetch('/api/auth/logout', { method: 'POST' });
 }
+
+export async function getCurrentUser(): Promise<AuthUser | null> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const data = await res.json();
+    return data.user;
+  } catch (error) {
+    console.error('Failed to fetch current user:', error);
+    return null;
+  }
+}
