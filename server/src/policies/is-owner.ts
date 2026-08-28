@@ -8,7 +8,7 @@ export default async (policyContext: any, config: any, { strapi }: { strapi: Cor
   }
 
   const userRole = user.role.name;
-  
+
   if (userRole === 'Admin' || userRole === 'Content-Manager') {
     return true;
   }
@@ -17,22 +17,22 @@ export default async (policyContext: any, config: any, { strapi }: { strapi: Cor
     return false;
   }
 
-  const recordId = policyContext.params.id;
+  const recordDocumentId = policyContext.params.id;
 
-  if (!recordId) {
+  if (!recordDocumentId) {
     return false;
   }
 
   let course;
 
   if (config.type === 'course') {
-    course = await strapi.db.query('api::course.course').findOne({
-      where: { id: recordId },
+    course = await strapi.documents('api::course.course').findOne({
+      documentId: recordDocumentId,
       populate: ['instructor'],
     });
   } else if (config.type === 'lesson') {
-    const lesson = await strapi.db.query('api::lesson.lesson').findOne({
-      where: { id: recordId },
+    const lesson = await strapi.documents('api::lesson.lesson').findOne({
+      documentId: recordDocumentId,
       populate: { course: { populate: ['instructor'] } },
     });
 
@@ -42,5 +42,10 @@ export default async (policyContext: any, config: any, { strapi }: { strapi: Cor
   if (!course || !course.instructor) {
     return false;
   }
-  return course.instructor.id === user.id;
+
+  const currentUser = await strapi.db.query('plugin::users-permissions.user').findOne({
+    where: { id: user.id }
+  });
+
+  return course.instructor.documentId === currentUser.documentId;
 };
