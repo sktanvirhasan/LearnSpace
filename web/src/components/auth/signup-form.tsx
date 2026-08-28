@@ -35,8 +35,8 @@ export function SignupForm() {
       
       await refetchUser();
       
+       router.refresh();
       router.push('/');
-      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {

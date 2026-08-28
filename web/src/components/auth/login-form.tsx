@@ -31,8 +31,8 @@ export function LoginForm() {
     try {
       await loginUser({ identifier, password });
       await refetchUser();
-      router.push('/');
       router.refresh();
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
