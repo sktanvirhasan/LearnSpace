@@ -14,7 +14,8 @@ dist/
 # Strapi
 server/.tmp/
 server/.cache/
-server/public/uploads/
+server/public/uploads/*
+!server/public/uploads/.gitkeep
 
 # OS
 .DS_Store
