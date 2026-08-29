@@ -1,12 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, LogOut } from "lucide-react";
 
 export function ProtectedNavbar() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  let dashboardLink = "/dashboard";
+  if (pathname.startsWith("/admin")) {
+    dashboardLink = "/admin";
+  } else if (pathname.startsWith("/instructor")) {
+    dashboardLink = "/instructor";
+  } else if (pathname.startsWith("/content-manager")) {
+    dashboardLink = "/content-manager";
+  }
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -16,7 +26,7 @@ export function ProtectedNavbar() {
 
   return (
     <header className="px-6 h-16 flex items-center justify-between border-b bg-white shadow-sm sticky top-0 z-50">
-      <Link className="flex items-center gap-2 cursor-pointer" href="/">
+      <Link className="flex items-center gap-2 cursor-pointer" href={dashboardLink}>
         <GraduationCap className="h-6 w-6 text-indigo-600" />
         <span className="font-bold text-xl text-slate-900">LearnSpace</span>
       </Link>

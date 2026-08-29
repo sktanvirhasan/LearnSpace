@@ -32,6 +32,16 @@ export async function getMyCourses(token: string) {
   return res.json();
 }
 
+export async function getCourse(documentId: string, token: string) {
+  const res = await fetch(`${API_URL}/api/courses/${documentId}?populate=*`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+  return res.json();
+}
+
 export async function createCourse(data: any, token: string) {
   const res = await fetch(`${API_URL}/api/courses`, {
     method: "POST",
