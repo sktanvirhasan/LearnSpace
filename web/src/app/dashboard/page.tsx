@@ -13,6 +13,14 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  const userRes = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337"}/api/users/me?populate=role`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  
+  const userData = await userRes.json();
+
   const coursesRes = await getCourses(token);
   const courses = coursesRes.data || [];
 
@@ -22,7 +30,12 @@ export default async function DashboardPage() {
   return (
     <>
       <ProtectedNavbar />
-      <StudentDashboard allCourses={courses} initialEnrollments={enrollments} token={token} />
+      <StudentDashboard 
+        user={userData}
+        allCourses={courses} 
+        initialEnrollments={enrollments} 
+        token={token} 
+      />
     </>
   );
 }

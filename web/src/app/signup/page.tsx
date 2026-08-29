@@ -1,9 +1,11 @@
 import { SignupForm } from '@/components/auth/signup-form';
+import { Navbar } from '@/components/layout/navbar';
 
 export default function SignupPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <>
+      <Navbar />
       <SignupForm />
-    </div>
+    </>
   );
 }

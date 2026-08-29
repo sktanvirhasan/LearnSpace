@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { markLessonComplete } from "@/lib/api/progress";
-import { CheckCircle2, ArrowLeft, PlayCircle, Lock, BookOpen } from "lucide-react";
+import { CheckCircle2, PlayCircle, BookOpen, Lock } from "lucide-react";
 
 export function CourseViewer({
   course,
@@ -66,53 +66,47 @@ export function CourseViewer({
   const isActiveCompleted = activeLesson && completedIds.has(activeLesson.documentId);
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-neutral-50 flex flex-col lg:flex-row">
-      <aside className="w-full lg:w-[340px] bg-white border-r border-neutral-200/80 flex flex-col lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16">
-        <div className="p-6">
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="group inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors mb-6"
-          >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-            Dashboard
-          </button>
-
-          <div className="space-y-1.5">
-            <p className="text-[11px] font-semibold text-indigo-600 uppercase tracking-wider">
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-50 flex flex-col lg:flex-row font-sans">
+      <aside className="w-full lg:w-[420px] bg-white border-r border-slate-200/80 flex flex-col lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
+        <div className="p-6 md:p-8">
+          <div className="space-y-2">
+            <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-widest rounded-full border border-indigo-100">
               Course
-            </p>
-            <h2 className="font-bold text-[22px] leading-tight text-neutral-900">
+            </span>
+            <h2 className="font-extrabold text-2xl leading-tight text-slate-900">
               {course.title}
             </h2>
-            <p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed">
+            <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mt-2">
               {course.description}
             </p>
           </div>
 
-          <div className="mt-6 p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-neutral-600">
-                Your Progress
+          <div className="mt-8 p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200/60 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Course Progress
               </span>
-              <span className="text-sm font-bold text-neutral-900">{percent}%</span>
+              <span className="text-sm font-extrabold text-indigo-600">{percent}%</span>
             </div>
-            <Progress value={percent} className="h-2" />
-            <p className="text-xs text-neutral-500 mt-2">
-              {completedCount} of {totalLessons} lessons completed
+            <Progress value={percent} className="h-2.5 bg-slate-200/80" />
+            <p className="text-xs text-slate-500 mt-3 font-medium">
+              <span className="text-slate-700 font-bold">{completedCount}</span> of {totalLessons} lessons completed
             </p>
           </div>
         </div>
 
-        <Separator />
+        <Separator className="bg-slate-100" />
 
-        <div className="flex-1 overflow-y-auto p-4">
-          <p className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-2 px-2">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
+          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">
             Curriculum
           </p>
           {!course.lessons || course.lessons.length === 0 ? (
-            <p className="text-sm text-neutral-500 px-2 py-4">No lessons available yet.</p>
+            <div className="bg-slate-50 rounded-xl p-6 text-center border border-slate-100">
+              <p className="text-sm text-slate-500 font-medium">No lessons available yet.</p>
+            </div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {course.lessons.map((lesson: any, index: number) => {
                 const isDone = completedIds.has(lesson.documentId);
                 const isActive = activeLesson?.documentId === lesson.documentId;
@@ -120,32 +114,34 @@ export function CourseViewer({
                   <button
                     key={lesson.documentId}
                     onClick={() => setActiveLesson(lesson)}
-                    className={`w-full text-left px-3 py-3 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                    className={`cursor-pointer w-full text-left p-3 rounded-2xl transition-all duration-200 flex items-center gap-4 ${
                       isActive
-                        ? "bg-indigo-50 ring-1 ring-indigo-200"
-                        : "hover:bg-neutral-50"
+                        ? "bg-indigo-600 shadow-md shadow-indigo-200 transform scale-[1.02]"
+                        : "hover:bg-slate-100"
                     }`}
                   >
                     <span
-                      className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                        isDone
-                          ? "bg-emerald-500 text-white"
-                          : isActive
-                          ? "bg-indigo-600 text-white"
-                          : "bg-neutral-100 text-neutral-500"
+                      className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 shadow-sm ${
+                        isActive
+                          ? "bg-white text-indigo-700"
+                          : isDone
+                          ? "bg-emerald-500 text-white shadow-emerald-200"
+                          : "bg-white text-slate-400 border border-slate-200"
                       }`}
                     >
-                      {isDone ? <CheckCircle2 className="w-4 h-4" /> : index + 1}
+                      {isDone ? <CheckCircle2 className="w-5 h-5" /> : index + 1}
                     </span>
-                    <span className="flex-1 min-w-0">
+                    <span className="flex-1 min-w-0 py-1">
                       <span
-                        className={`block truncate font-medium ${
-                          isActive ? "text-indigo-700" : "text-neutral-700"
+                        className={`block truncate font-bold text-sm ${
+                          isActive ? "text-white" : "text-slate-700"
                         }`}
                       >
                         {lesson.title}
                       </span>
-                      <span className="text-[11px] text-neutral-400">
+                      <span className={`text-xs mt-0.5 block font-medium ${
+                        isActive ? "text-indigo-200" : "text-slate-400"
+                      }`}>
                         {isDone ? "Completed" : "Lesson " + (index + 1)}
                       </span>
                     </span>
@@ -157,81 +153,81 @@ export function CourseViewer({
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto lg:h-[calc(100vh-4rem)]">
-        <div className="max-w-3xl mx-auto px-6 py-10">
+      <main className="flex-1 overflow-y-auto lg:h-[calc(100vh-4rem)] relative bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-slate-50">
+        <div className="max-w-4xl mx-auto px-4 py-8 md:px-8 md:py-12">
           {!activeLesson ? (
-            <div className="bg-white rounded-3xl border border-neutral-200/80 p-16 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="w-6 h-6 text-indigo-600" />
+            <div className="bg-white rounded-[2rem] border border-slate-200/80 p-12 md:p-20 text-center shadow-sm">
+              <div className="w-20 h-20 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <BookOpen className="w-10 h-10 text-indigo-500" />
               </div>
-              <h2 className="text-xl font-bold text-neutral-900 mb-1.5">
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-3 tracking-tight">
                 Ready to start learning?
               </h2>
-              <p className="text-neutral-500 text-sm">
-                Select a lesson from the curriculum to begin.
+              <p className="text-slate-500 text-base max-w-sm mx-auto leading-relaxed">
+                Select a lesson from the curriculum sidebar to begin your journey.
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {activeLesson.videoUrl && (
-                <div className="w-full aspect-video bg-neutral-900 rounded-2xl overflow-hidden shadow-sm ring-1 ring-neutral-200/50">
+                <div className="w-full aspect-video bg-slate-900 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-900/10 group relative">
                   <iframe
                     src={getEmbedUrl(activeLesson.videoUrl)}
-                    className="w-full h-full"
+                    className="w-full h-full absolute inset-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
                 </div>
               )}
 
-              <div>
-                <div className="flex items-start justify-between gap-4 mb-1">
+              <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-200/60">
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                   <Badge
                     variant="secondary"
-                    className="bg-indigo-50 text-indigo-700 hover:bg-indigo-50 font-semibold text-[11px]"
+                    className="bg-indigo-50 text-indigo-700 hover:bg-indigo-50 font-bold text-xs px-3 py-1.5 uppercase tracking-widest rounded-lg border border-indigo-100"
                   >
-                    LESSON {(course.lessons?.findIndex((l: any) => l.documentId === activeLesson.documentId) ?? 0) + 1}
+                    Lesson {(course.lessons?.findIndex((l: any) => l.documentId === activeLesson.documentId) ?? 0) + 1}
                   </Badge>
                   {isActiveCompleted && (
-                    <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border-emerald-200 gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> Completed
+                    <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border border-emerald-200 gap-1.5 px-3 py-1.5 rounded-lg shadow-sm">
+                      <CheckCircle2 className="w-4 h-4" /> 
+                      <span className="font-bold">Completed</span>
                     </Badge>
                   )}
                 </div>
-                <h1 className="text-3xl font-bold text-neutral-900 tracking-tight mt-3">
+                
+                <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-8">
                   {activeLesson.title}
                 </h1>
-              </div>
 
-              <Separator />
+                <div className="prose prose-slate md:prose-lg max-w-none text-slate-600 whitespace-pre-wrap leading-relaxed">
+                  {activeLesson.content}
+                </div>
 
-              <div className="prose prose-neutral max-w-none text-neutral-700 whitespace-pre-wrap leading-[1.75] text-[15px]">
-                {activeLesson.content}
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  onClick={handleMarkComplete}
-                  disabled={isActiveCompleted || marking}
-                  size="lg"
-                  className={`rounded-xl font-semibold px-6 h-12 shadow-sm transition-all ${
-                    isActiveCompleted
-                      ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 cursor-not-allowed"
-                      : "bg-neutral-900 text-white hover:bg-neutral-800"
-                  }`}
-                >
-                  {isActiveCompleted ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 mr-2" /> Lesson Completed
-                    </>
-                  ) : marking ? (
-                    "Saving..."
-                  ) : (
-                    <>
-                      <PlayCircle className="w-4 h-4 mr-2" /> Mark as Complete
-                    </>
-                  )}
-                </Button>
+                <div className="mt-12 pt-8 border-t border-slate-100">
+                  <Button
+                    onClick={handleMarkComplete}
+                    disabled={isActiveCompleted || marking}
+                    size="lg"
+                    className={`cursor-pointer w-full sm:w-auto rounded-2xl font-bold px-8 h-14 shadow-sm transition-all duration-300 text-base ${
+                      isActiveCompleted
+                        ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border border-emerald-200 cursor-not-allowed"
+                        : "bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 hover:-translate-y-0.5"
+                    }`}
+                  >
+                    {isActiveCompleted ? (
+                      <>
+                        <CheckCircle2 className="w-5 h-5 mr-2.5" /> Lesson Completed
+                      </>
+                    ) : marking ? (
+                      "Saving Progress..."
+                    ) : (
+                      <>
+                        <PlayCircle className="w-5 h-5 mr-2.5" /> Mark as Complete
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           )}

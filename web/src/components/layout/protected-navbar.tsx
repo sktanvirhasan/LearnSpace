@@ -25,14 +25,21 @@ export function ProtectedNavbar() {
   };
 
   return (
-    <header className="px-6 h-16 flex items-center justify-between border-b bg-white shadow-sm sticky top-0 z-50">
+    <header className="h-16 w-full bg-slate-100/40 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 flex items-center justify-between px-6 lg:px-12 shadow-sm">
       <Link className="flex items-center gap-2 cursor-pointer" href={dashboardLink}>
-        <GraduationCap className="h-6 w-6 text-indigo-600" />
-        <span className="font-bold text-xl text-slate-900">LearnSpace</span>
+        <GraduationCap className="h-7 w-7 text-indigo-600" />
+        <span className="font-extrabold text-xl lg:text-2xl tracking-tight text-[#0a2540]">
+          LearnSpace
+        </span>
       </Link>
       
-      <Button onClick={handleLogout} variant="destructive" className="cursor-pointer flex items-center gap-2">
-        <LogOut className="h-4 w-4" /> Logout
+      <Button 
+        onClick={handleLogout} 
+        variant="ghost" 
+        className="cursor-pointer flex items-center gap-2.5 text-slate-700 hover:text-rose-600 hover:bg-rose-50/60 font-bold text-base h-10 px-4 transition-all rounded-xl"
+      >
+        <LogOut className="h-5 w-5 text-slate-500 group-hover:text-rose-600" />
+        Logout
       </Button>
     </header>
   );
