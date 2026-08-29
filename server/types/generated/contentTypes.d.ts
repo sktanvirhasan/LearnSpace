@@ -561,6 +561,7 @@ export interface ApiProgressProgress extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    completed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

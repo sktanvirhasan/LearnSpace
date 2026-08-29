@@ -22,6 +22,10 @@
       "relation": "manyToOne",
       "target": "api::lesson.lesson",
       "inversedBy": "progresses"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

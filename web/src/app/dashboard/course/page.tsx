@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { getCourse } from "@/lib/api/courses";
+import { getMyProgress } from "@/lib/api/progress";
 import { CourseViewer } from "@/components/course/course-viewer";
 import { ProtectedNavbar } from "@/components/layout/protected-navbar";
 import { redirect } from "next/navigation";
@@ -7,7 +8,7 @@ import { redirect } from "next/navigation";
 export default async function CoursePage({ searchParams }: { searchParams: any }) {
   const cookieStore = await cookies();
   const token = cookieStore.get("jwt")?.value || "";
-  
+
   if (!token) {
     redirect("/login");
   }
@@ -29,7 +30,10 @@ export default async function CoursePage({ searchParams }: { searchParams: any }
     );
   }
 
-  const courseRes = await getCourse(courseId, token);
+  const [courseRes, progressRes] = await Promise.all([
+    getCourse(courseId, token),
+    getMyProgress(token),
+  ]);
 
   if (courseRes?.error) {
     return (
@@ -65,7 +69,7 @@ export default async function CoursePage({ searchParams }: { searchParams: any }
   return (
     <>
       <ProtectedNavbar />
-      <CourseViewer course={course} />
+      <CourseViewer course={course} initialProgress={progressRes?.data || []} token={token} />
     </>
   );
 }
